@@ -63,14 +63,7 @@ public class FirstTest {
 //                );
 //    }
 //
-    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_message + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
 
-    }
 
     @Test
     public void cancelSearch() {
@@ -88,7 +81,7 @@ public class FirstTest {
                         "'Search...' is not found ",
                         5
                 );
-        waitForListElementPresent
+        waitForElementPresent
                 (
                         By.id("org.wikipedia:id/search_results_list"),
                         "List result is not found",
@@ -102,25 +95,25 @@ public class FirstTest {
                         5
                 );
 
-        waitForElementAndClick
-                (
-                        By.id("org.wikipedia:id/search_close_btn"),
-                        "Cannot find X(close) button",
-                        5
-                );
-
         waitForElementNotPresent
                 (
-                        By.id("org.wikipedia:id/search_close_btn"),
-                        "X(close) is still present on the page",
+                        By.id("org.wikipedia:id/search_results_list"),
+                        "List result is still present on the page",
                         5
                 );
-        System.out.println("test");
 
     }
 
     private WebElement waitForElementPresent(By by, String error_mesage) {
         return waitForElementPresent(by, error_mesage, 5);
+    }
+
+    private WebElement waitForElementPresent(By by, String error_mesage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_mesage + "\n");
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
     }
 
     private WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
@@ -140,13 +133,6 @@ public class FirstTest {
         wait.withMessage(error_mesage + "\n");
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
-        );
-    }
-
-    private List<WebElement> waitForListElementPresent(By by, String error_mesage, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_mesage + "\n");
-        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by)
         );
     }
 
