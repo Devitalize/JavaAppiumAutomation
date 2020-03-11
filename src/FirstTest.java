@@ -115,6 +115,7 @@ public class FirstTest {
                         "X(close) is still present on the page",
                         5
                 );
+        System.out.println("test");
 
     }
 
@@ -148,6 +149,7 @@ public class FirstTest {
         return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by)
         );
     }
+
 
 }
 
