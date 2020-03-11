@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
     private AppiumDriver driver;
@@ -36,38 +37,84 @@ public class FirstTest {
     }
 
 
+    //
+//    @Test
+//    public void findSearchPlaceholder() {
+//        waitForElementAndClick
+//                (
+//                        By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+//                        "Cannot find Search Wikipedia button",
+//                        5
+//                );
+//        WebElement placeholder = waitForElementPresent
+//                (
+//                        By.xpath("//*[contains(@text,'Search…')]"),
+//                        "Cannot find 'Search...' placeholder on the screen",
+//                        5
+//                );
+//
+//        String actual_placeholder = placeholder.getAttribute("text");
+//
+//        Assert.assertEquals
+//                (
+//                        "Placeholder 'Search...' does not present on the screen",
+//                        "Search…",
+//                        actual_placeholder
+//                );
+//    }
+//
+    private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.presenceOfElementLocated(by)
+        );
+
+    }
 
     @Test
-    public void findSearchPlaceholder() {
+    public void cancelSearch() {
         waitForElementAndClick
                 (
                         By.xpath("//*[contains(@text,'Search Wikipedia')]"),
                         "Cannot find Search Wikipedia button",
                         5
                 );
-        WebElement placeholder = waitForElementPresent
+
+        waitForElementAndSendKeys
                 (
                         By.xpath("//*[contains(@text,'Search…')]"),
-                        "Cannot find 'Search...' placeholder on the screen",
+                        "Test",
+                        "'Search...' is not found ",
+                        5
+                );
+        waitForListElementPresent
+                (
+                        By.id("org.wikipedia:id/search_results_list"),
+                        "List result is not found",
                         5
                 );
 
-        String actual_placeholder = placeholder.getAttribute("text");
-
-        Assert.assertEquals
+        waitForElementAndClick
                 (
-                        "Placeholder 'Search...' does not present on the screen",
-                        "Search…",
-                        actual_placeholder
+                        By.id("org.wikipedia:id/search_close_btn"),
+                        "Cannot find X(close) button",
+                        5
                 );
-    }
 
-    private WebElement waitForElementPresent(By by, String error_mesage, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
-        wait.withMessage(error_mesage + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
+        waitForElementAndClick
+                (
+                        By.id("org.wikipedia:id/search_close_btn"),
+                        "Cannot find X(close) button",
+                        5
+                );
+
+        waitForElementNotPresent
+                (
+                        By.id("org.wikipedia:id/search_close_btn"),
+                        "X(close) is still present on the page",
+                        5
+                );
 
     }
 
@@ -92,6 +139,13 @@ public class FirstTest {
         wait.withMessage(error_mesage + "\n");
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
+
+    private List<WebElement> waitForListElementPresent(By by, String error_mesage, long timeoutInSeconds) {
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_mesage + "\n");
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by)
         );
     }
 
