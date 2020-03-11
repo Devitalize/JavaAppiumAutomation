@@ -1,0 +1,7 @@
+<application>
+  <component name="GithubAccounts">
+    <account id="68a43049-6bab-4d40-a98d-966b521f407a" name="Devitalize">
+      <server host="github.com" />
+    </account>
+  </component>
+</application>
