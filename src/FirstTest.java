@@ -37,32 +37,32 @@ public class FirstTest {
     }
 
 
-    //
-//    @Test
-//    public void findSearchPlaceholder() {
-//        waitForElementAndClick
-//                (
-//                        By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-//                        "Cannot find Search Wikipedia button",
-//                        5
-//                );
-//        WebElement placeholder = waitForElementPresent
-//                (
-//                        By.xpath("//*[contains(@text,'Search…')]"),
-//                        "Cannot find 'Search...' placeholder on the screen",
-//                        5
-//                );
-//
-//        String actual_placeholder = placeholder.getAttribute("text");
-//
-//        Assert.assertEquals
-//                (
-//                        "Placeholder 'Search...' does not present on the screen",
-//                        "Search…",
-//                        actual_placeholder
-//                );
-//    }
-//
+
+    @Test
+    public void findSearchPlaceholder() {
+        waitForElementAndClick
+                (
+                        By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                        "Cannot find Search Wikipedia button",
+                        5
+                );
+        WebElement placeholder = waitForElementPresent
+                (
+                        By.xpath("//*[contains(@text,'Search…')]"),
+                        "Cannot find 'Search...' placeholder on the screen",
+                        5
+                );
+
+        String actual_placeholder = placeholder.getAttribute("text");
+
+        Assert.assertEquals
+                (
+                        "Placeholder 'Search...' does not present on the screen",
+                        "Search…",
+                        actual_placeholder
+                );
+    }
+
 
 
     @Test
