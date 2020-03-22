@@ -467,9 +467,9 @@ public class FirstTest {
                 );
         waitForElementAndClick
                 (
-                        By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']//*[@class='android.widget.ImageButton']"),
                         "Cannot find article, cannot find X link",
-                        15
+                        20
                 );
 
         waitForElementAndClick
@@ -517,9 +517,9 @@ public class FirstTest {
         );
         waitForElementAndClick
                 (
-                        By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                        By.xpath("//*[@resource-id='org.wikipedia:id/page_toolbar']//android.widget.ImageButton[@content-desc='Navigate up']"),
                         "Cannot find article, cannot find X link",
-                        5
+                        20
                 );
         waitForElementAndClick
                 (
@@ -544,6 +544,7 @@ public class FirstTest {
         );
 
     }
+
 
     private WebElement waitForElementPresent(By by, String error_mesage) {
         return waitForElementPresent(by, error_mesage, 5);
@@ -650,6 +651,9 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
+
+
 }
+
 
 
