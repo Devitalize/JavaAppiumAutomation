@@ -11,7 +11,8 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
     SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-    SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']";
+    SEARCH_EMPTY_RESULT_ELEMENT = "//*[@text='No results found']",
+    SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION = "//*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']/../*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']";
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -23,6 +24,12 @@ public class SearchPageObject extends MainPageObject {
     //Изменение подстроки для поиска нужного заголовка
     private static String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+
+    //Изменение подстроки для поиска по тайтлу и описанию одновременно
+    private static String getResultSearchElementByTitleAndDescription(String title, String description) {
+        String search_result_replace_title = SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION.replace("{TITLE}", title);
+        return search_result_replace_title.replace( "{DESCRIPTION}", description);
     }
     /* TEMPLATES METHODS */
 
@@ -123,4 +130,12 @@ public class SearchPageObject extends MainPageObject {
         WebElement title_element = this.waitForElementPresent(By.xpath(SEARCH_INPUT), "Cannot find placeholder on page", 15);
         return title_element.getAttribute("text");
     }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String search_result_xpath = getResultSearchElementByTitleAndDescription(title, description);
+        this.waitForElementPresent(By.xpath(search_result_xpath),
+                "Cannot find and search result with substring " + title + " and " + description ,
+                20);
+    }
+
 }
