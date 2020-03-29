@@ -13,6 +13,7 @@ public class NavigationUI extends MainPageObject {
         super(driver);
     }
 
+    //Клик на иконку My list
     public void clickMyLists(){
         this.waitForElementAndClick
                 (

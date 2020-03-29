@@ -14,13 +14,12 @@ public class MainPageObject {
 
     protected AppiumDriver driver;
 
-    public MainPageObject(AppiumDriver driver)
-    {
+    public MainPageObject(AppiumDriver driver) {
         this.driver = driver;
     }
 
-
-    public void assertElementPresent(By by, String error_message) {
+//Проверка, что результатов больше 1
+    public void assertElementsPresent(By by, String error_message) {
         int amount_of_elements = getAmountOfElements(by);
         if (amount_of_elements < 1) {
             String default_message = "An element '" + by.toString() + "' supposed to be present \n";
@@ -28,10 +27,12 @@ public class MainPageObject {
         }
     }
 
+    //Ожидание появления элемента на странице с дефолтным таймаутом 5 сек
     public WebElement waitForElementPresent(By by, String error_message) {
         return waitForElementPresent(by, error_message, 5);
     }
 
+    //Ожидание появления элемента на странице с указанием таймаута
     public WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -40,24 +41,28 @@ public class MainPageObject {
         );
     }
 
+    //Клик по элементу
     public WebElement waitForElementAndClick(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.click();
         return element;
     }
 
+    //Ввод текста
     public WebElement waitForElementAndSendKeys(By by, String value, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.sendKeys(value);
         return element;
     }
 
+    //Очистка текста в инпуте
     public WebElement waitForElementAndClear(By by, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         element.clear();
         return element;
     }
 
+    //Проверка отсутствия элемента
     public boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         wait.withMessage(error_message + "\n");
@@ -66,6 +71,7 @@ public class MainPageObject {
         );
     }
 
+    //Свайп снизу вверх
     public void swipeUp(int timeOfSwipe) {
         TouchAction action = new TouchAction(driver);
         Dimension size = driver.manage().window().getSize();
@@ -80,10 +86,12 @@ public class MainPageObject {
                 .release().perform();
     }
 
+    //Свайп снизу вверх с указанием скорости свайпа
     public void swipeUpQuick() {
         swipeUp(200);
     }
 
+    //Свайп вверх с поиском элемента
     public void swipeUpToFindElement(By by, String error_message, int max_swipes) {
         int already_swipes = 0;
         while (driver.findElements(by).size() == 0) {
@@ -96,6 +104,7 @@ public class MainPageObject {
         }
     }
 
+    //Свайп элемента влево
     public void swipeElementToLeft(By by, String error_message) {
         WebElement element = waitForElementPresent(
                 by,
@@ -116,11 +125,13 @@ public class MainPageObject {
                 .release().perform();
     }
 
+    //Возвращает кол-во найденых элементов
     public int getAmountOfElements(By by) {
         List elements = driver.findElements(by);
         return elements.size();
     }
 
+    //Проверка, что элементы не найдены
     public void assertElementsNotPresent(By by, String error_message) {
         int amount_of_elements = getAmountOfElements(by);
         if (amount_of_elements > 0) {
@@ -129,6 +140,7 @@ public class MainPageObject {
         }
     }
 
+    //Возвращает указанный атрибут элемента
     public String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);

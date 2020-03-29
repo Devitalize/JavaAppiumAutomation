@@ -14,26 +14,38 @@ public class ArticlePageObject extends MainPageObject {
             ADD_TO_MY_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
             MY_LIST_NAME_INPUT = "org.wikipedia:id/text_input",
             MY_LIST_OK_BUTTON = "//*[@text='OK']",
-    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+    CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+    MY_LIST_EXISTING_NAME_TPL = "//*[@text='{NAME_OF_FOLDER}']";
 
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
     }
+    /* TEMPLATES METHODS */
 
+    //Изменение подстроки для поиска нужного заголовка
+    private static String getMyListExistingName(String substring) {
+        return MY_LIST_EXISTING_NAME_TPL.replace("{NAME_OF_FOLDER}", substring);
+    }
+    /* TEMPLATES METHODS */
+
+    //Ожидание появления тайтла
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page", 15);
     }
 
+    //Возвращает текст тайтла
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
         return title_element.getAttribute("text");
     }
 
+    //Свайпает до футера
     public void swipeToFooter() {
         this.swipeUpToFindElement(By.xpath(FOOTER_ELEMENT), "Cannot find the end of article", 20);
     }
 
+    //Добавление статьи в Мой лист
     public void addArticleToMyList(String name_of_folder) {
         this.waitForElementAndClick
                 (
@@ -73,6 +85,30 @@ public class ArticlePageObject extends MainPageObject {
                         5
                 );
     }
+
+    //сохранение статьи в
+    public void addArticleToMyExistingList(String substring) {
+        this.waitForElementAndClick
+                (
+                        By.xpath(OPTIONS_BUTTON),
+                        "Cannot find button to open article options",
+                        5
+                );
+        this.waitForElementAndClick
+                (
+                        By.xpath(OPTIONS_ADD_TO_MY_LIST_BUTTON),
+                        "Cannot find option to add article to reading list",
+                        5
+                );
+        String name_of_folder_xpath = getMyListExistingName(substring);
+        this.waitForElementAndClick(
+                By.xpath(name_of_folder_xpath),
+                "Cannot find '" + substring + "' list name",
+                10
+        );
+    }
+
+    //Клик на закрытие статьи
     public void closeArticle(){
         this.waitForElementAndClick
                 (
@@ -80,5 +116,11 @@ public class ArticlePageObject extends MainPageObject {
                         "Cannot find article, cannot find X link",
                         5
                 );
+    }
+
+    //Проверяет наличие тайтла без ожидания
+    public void assertTitleNotWaiting(){
+        this.assertElementsPresent(By.xpath(TITLE),
+                "We supposed not find any results");
     }
 }

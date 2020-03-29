@@ -38,14 +38,17 @@ public class CoreTestCase extends TestCase {
         super.tearDown();
     }
 
+    //поворот в портретный режим
     protected void rotateScreenPortrait(){
         driver.rotate(ScreenOrientation.PORTRAIT);
     }
 
+    //поворот в горизонтальный режим
     protected void rotateScreenLandscape(){
         driver.rotate(ScreenOrientation.LANDSCAPE);
     }
 
+    //сворачивание приложения и открытие
     protected void backgroundApp(int seconds){
         driver.runAppInBackground(seconds);
     }
