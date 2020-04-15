@@ -6,6 +6,7 @@ import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
+import lib.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,7 +23,7 @@ public class MainPageObject {
         this.driver = driver;
     }
 
-//Проверка, что результатов больше 1
+    //Проверка, что результатов больше 1
     public void assertElementsPresent(String locator, String error_message) {
         By by = this.getLocatorByString(locator);
         int amount_of_elements = getAmountOfElements(locator);
@@ -112,6 +113,22 @@ public class MainPageObject {
         }
     }
 
+    //Клик по кнопке удаления статьи на айос
+    public void clickElementToTheRightUpperCorner(String locator, String error_message){
+        WebElement element = waitForElementPresent(locator + "/..", error_message);
+        int right_x = element.getLocation().getX();
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+        int width = element.getSize().getWidth();
+
+        int point_to_click_x = (right_x + width) - 3;
+        int point_to_click_y = middle_y;
+
+        TouchAction action = new TouchAction(driver);
+        action.tap(PointOption.point(point_to_click_x, point_to_click_y)).perform();
+    }
+
     //Свайп элемента влево
     public void swipeElementToLeft(String locator, String error_message) {
         WebElement element = waitForElementPresent(
@@ -126,11 +143,17 @@ public class MainPageObject {
         int middle_y = (upper_y + lower_y) / 2;
 
         TouchAction action = new TouchAction(driver);
-        action
-                .press(PointOption.point(right_x, middle_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(350)))
-                .moveTo(PointOption.point(left_x, middle_y))
-                .release().perform();
+        action.press(PointOption.point(right_x, middle_y));
+        action.waitAction(WaitOptions.waitOptions(Duration.ofMillis(350)));
+
+        if (Platform.getInstance().isAndroid()) {
+            action.moveTo(PointOption.point(left_x, middle_y));
+        } else {
+            int offset_x = ( -1 * element.getSize().getWidth());
+            action.moveTo(PointOption.point(offset_x, 0));
+        }
+        action.release();
+                action.perform();
     }
 
     //Возвращает кол-во найденых элементов
@@ -157,17 +180,17 @@ public class MainPageObject {
     }
 
     //Выбор по какому критерию локатора искать
-    private By getLocatorByString(String locator_with_type){
+    private By getLocatorByString(String locator_with_type) {
         String[] exploded_locator = locator_with_type.split(Pattern.quote(":"), 2);
         String by_type = exploded_locator[0];
         String locator = exploded_locator[1];
 
-        if(by_type.equals("xpath")){
+        if (by_type.equals("xpath")) {
             return By.xpath(locator);
-        } else if (by_type.equals("id")){
+        } else if (by_type.equals("id")) {
             return By.id(locator);
         } else {
-            throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type );
+            throw new IllegalArgumentException("Cannot get type of locator. Locator: " + locator_with_type);
         }
     }
 

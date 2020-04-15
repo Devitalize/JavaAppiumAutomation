@@ -4,15 +4,15 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class SearchPageObject extends MainPageObject {
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[contains(@text,'Search Wikipedia')]",
-            SEARCH_INPUT = "xpath://*[contains(@text,'Search…')]",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-    SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-    SEARCH_EMPTY_RESULT_ELEMENT = "xpath://*[@text='No results found']",
-    SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title' and @text='{TITLE}']/../*[@resource-id='org.wikipedia:id/page_list_item_description' and @text='{DESCRIPTION}']";
+abstract public class SearchPageObject extends MainPageObject {
+    protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_ELEMENT,
+            SEARCH_EMPTY_RESULT_ELEMENT,
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION;
 
 
     public SearchPageObject(AppiumDriver driver) {
@@ -29,20 +29,20 @@ public class SearchPageObject extends MainPageObject {
     //Изменение подстроки для поиска по тайтлу и описанию одновременно
     private static String getResultSearchElementByTitleAndDescription(String title, String description) {
         String search_result_replace_title = SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION.replace("{TITLE}", title);
-        return search_result_replace_title.replace( "{DESCRIPTION}", description);
+        return search_result_replace_title.replace("{DESCRIPTION}", description);
     }
     /* TEMPLATES METHODS */
 
-//Клик и ожидание строки поиска
+    //Клик и ожидание строки поиска
     public void initSearchInput() {
         this.waitForElementAndClick(
                 SEARCH_INIT_ELEMENT,
                 "Cannot find and click search init element",
-                10);
+                20);
         this.waitForElementPresent(
                 SEARCH_INIT_ELEMENT,
                 "Cannot find search input after clicking search input element",
-                5);
+                15);
     }
 
     //Ввод текста в строку поиска
@@ -66,7 +66,7 @@ public class SearchPageObject extends MainPageObject {
     public void waitForSearchResult() {
         this.waitForElementPresent(
                 SEARCH_RESULT_ELEMENT,
-                "Cannot find search result with substring " );
+                "Cannot find search result with substring ");
     }
 
     //Поиск кнопки закрытия поиска
@@ -98,23 +98,23 @@ public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementAndClick(
                 search_result_xpath,
-                "Cannot find and click search result with substring " + substring ,
+                "Cannot find and click search result with substring " + substring,
                 10);
     }
 
     //Возвращает кол-во элементов в результатах поиска
-    public int getAmountOfFoundArticles(){
+    public int getAmountOfFoundArticles() {
         this.waitForElementPresent(
-                        SEARCH_RESULT_ELEMENT,
-                        "Cannot find anything by the request ",
-                        15
-                );
+                SEARCH_RESULT_ELEMENT,
+                "Cannot find anything by the request ",
+                15
+        );
         return this.getAmountOfElements(
                 SEARCH_RESULT_ELEMENT);
     }
 
     //проверка наличия сообщения при отсутствии результатов
-    public void waitForEmptyResultsLabel(){
+    public void waitForEmptyResultsLabel() {
         this.waitForElementPresent(
                 SEARCH_EMPTY_RESULT_ELEMENT,
                 "Cannot find empty result element",
@@ -123,14 +123,14 @@ public class SearchPageObject extends MainPageObject {
     }
 
     //Проверка, что результатов поиска нет
-    public void assertThereIsNoResultOfSearch(){
+    public void assertThereIsNoResultOfSearch() {
         this.assertElementsNotPresent(
                 SEARCH_RESULT_ELEMENT,
                 "We supposed not find any results");
     }
 
     //Проверка, что есть хоть один результат поиска
-    public void assertThereIsResultOfSearch(){
+    public void assertThereIsResultOfSearch() {
         this.assertElementsPresent(
                 SEARCH_RESULT_ELEMENT,
                 "Cannot find search results");
@@ -149,7 +149,7 @@ public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElementByTitleAndDescription(title, description);
         this.waitForElementPresent(
                 search_result_xpath,
-                "Cannot find and search result with substring " + title + " and " + description ,
+                "Cannot find and search result with substring " + title + " and " + description,
                 20);
     }
 
