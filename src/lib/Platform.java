@@ -66,9 +66,6 @@ public class Platform {
         capabilities.setCapability("platformVersion", "13.4");
         capabilities.setCapability("app", "/Users/administrator/Desktop/course/JavaAppiumAutomation/apks/Wikipedia.app");
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        capabilities.setCapability("newCommandTimeout", 120);
-
         return capabilities;
     }
 

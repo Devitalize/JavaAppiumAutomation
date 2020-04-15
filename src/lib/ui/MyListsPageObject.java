@@ -32,6 +32,7 @@ abstract public class MyListsPageObject extends MainPageObject {
                 );
     }
 
+    //Свайп для удаления статьи
     public void swipeByArticleToDelete(String article_title) {
         this.waitForArticleToAppearByTitle(article_title);
 
@@ -46,6 +47,7 @@ abstract public class MyListsPageObject extends MainPageObject {
         this.waitForArticleToDisappearByTitle(article_title);
     }
 
+    //Подстановка нужного названия и проверка, что элемент отсутствует
     public void waitForArticleToDisappearByTitle(String article_title) {
         String article_title_xpath = getSavedArticleXpathByTitle(article_title);
         this.waitForElementNotPresent(
@@ -53,9 +55,9 @@ abstract public class MyListsPageObject extends MainPageObject {
                 "Saved article still present with title" + article_title,
                 15
         );
-        this.waitForArticleToDisappearByTitle(article_title);
     }
 
+    //Подстановка нужного названия и проверка, что элемент присутствует
     public void waitForArticleToAppearByTitle(String article_title) {
         String article_title_xpath = getSavedArticleXpathByTitle(article_title);
         this.waitForElementPresent(

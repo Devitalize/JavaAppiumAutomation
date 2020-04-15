@@ -53,25 +53,38 @@ public class MyListsTests extends CoreTestCase {
         ArticlePageObject.waitForTitleElement();
 
         String article_title = ArticlePageObject.getArticleTitle();
-        String name_of_folder = "Learning programming";
 
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
 
         ArticlePageObject.closeArticle();
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWithSubstring("JavaScript");
+        String name_two_article = "JavaScript";
+        SearchPageObject.clickByArticleWithSubstring(name_two_article);
         ArticlePageObject.waitForTitleElement();
-        ArticlePageObject.addArticleToMyExistingList(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            ArticlePageObject.addArticleToMyExistingList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
         ArticlePageObject.closeArticle();
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver);
         NavigationUI.clickMyLists();
 
         MyListsPageObject MyListsPageObject = MyListsPageObjectFactory.get(driver);
-        MyListsPageObject.openFolderByName(name_of_folder);
+        if (Platform.getInstance().isAndroid()) {
+            MyListsPageObject.openFolderByName(name_of_folder);
+        }
 
         MyListsPageObject.swipeByArticleToDelete(article_title);
+        MyListsPageObject.waitForArticleToAppearByTitle(name_two_article);
+
+
     }
 }
